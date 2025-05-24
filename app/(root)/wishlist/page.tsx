@@ -77,6 +77,7 @@ const Wishlist = () => {
       } else {
         const data = await res.json();
         console.log("[Frontend] ✅ Wishlist products fetched:", data);
+        setWishlist(data);
       }
     } catch (err) {
       console.error("[Frontend] ❌ Error fetching wishlist products:", err);

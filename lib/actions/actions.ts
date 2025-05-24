@@ -64,6 +64,7 @@ export const getProductsFromAPI = async (category: string, subCategory: string) 
         method: "GET",
         cache: "no-store",
         headers: { "Content-Type": "application/json" },
+        next: { revalidate: 0 },
       }
     );
 
@@ -82,13 +83,21 @@ export const getProductsFromAPI = async (category: string, subCategory: string) 
 };
 
 export const getProducts = async () => {
-  const products = await Product.find();
-  return products.map(serializeMongooseDocuments); 
+  try {
+    const products = await Product.find();
+    return products.map(serializeMongooseDocuments);
+  } catch (error) {
+    console.error("[getProducts] DB Fetch Error:", error);
+    return [];
+  }
 };
 
 export const getProductDetails = async (urlOrId: string) => {
   try {
-    const res = await fetch(urlOrId);
+    const res = await fetch(urlOrId, {
+      cache: "no-store",
+      headers: { "Content-Type": "application/json" },
+    });
 
     if (!res.ok) {
       console.error(`[getProductDetails] API returned: ${res.status}`);
@@ -241,12 +250,14 @@ export const getWishlistProducts = async (wishlist: string[]) => {
 
 export const getAllProducts = async () => {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/products`, {
+    const res = await fetch(`${API_URL}/products`, {
       cache: "no-store",
+      headers: { "Content-Type": "application/json" },
+      next: { revalidate: 0 },
     });
 
     if (!res.ok) {
-      throw new Error("Failed to fetch products");
+      throw new Error(`Failed to fetch all products: ${res.status}`);
     }
 
     const data = await res.json();

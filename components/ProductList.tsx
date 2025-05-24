@@ -17,8 +17,8 @@ const ProductList = ({ category, isSignedIn }: ProductListProps) => {
     async function fetchAllProducts() {
       try {
         const endpoint = category
-          ? `/api/products?category=${encodeURIComponent(category)}`
-          : "/api/products";
+          ? `${process.env.NEXT_PUBLIC_API_URL}/api/products?category=${encodeURIComponent(category)}`
+          : `${process.env.NEXT_PUBLIC_API_URL}/api/products`;
 
         const res = await fetch(endpoint);
         if (!res.ok) {

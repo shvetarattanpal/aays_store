@@ -15,7 +15,7 @@ const ContactPage = () => {
     setError("");
 
     try {
-      const res = await fetch("/api/contact", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/contact`, {
         method: "POST",
         body: JSON.stringify({ name, email, message }),
         headers: {

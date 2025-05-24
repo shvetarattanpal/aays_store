@@ -71,14 +71,12 @@ const Wishlist = () => {
         body: JSON.stringify({ ids: signedInUser.wishlist }),
       });
 
-      const data = await res.json();
-
       if (!res.ok) {
-        console.error("[Frontend] ❌ Failed to fetch wishlist products:", data);
-        setWishlist([]);
+        const text = await res.text();
+        console.error("[Frontend] ❌ Failed to fetch wishlist products:", text);
       } else {
+        const data = await res.json();
         console.log("[Frontend] ✅ Wishlist products fetched:", data);
-        setWishlist(data);
       }
     } catch (err) {
       console.error("[Frontend] ❌ Error fetching wishlist products:", err);
@@ -111,7 +109,9 @@ const Wishlist = () => {
 
       {wishlist.length === 0 ? (
         <div className="text-center text-gray-500 py-20">
-          <p className="text-lg font-semibold mb-2">🫤 Your wishlist is empty</p>
+          <p className="text-lg font-semibold mb-2">
+            🫤 Your wishlist is empty
+          </p>
           <p className="text-sm font-semibold mb-4">
             Start exploring and add products you love!
           </p>

@@ -29,8 +29,9 @@ export default authMiddleware({
     "/api/webhooks",
     "/api/orders/:orderId",
     "/api/collections/:collectionId",
+    "/collections/:collectionId", 
     "/api/contact",
-  ], 
+  ],
 });
 
 export const config = {
@@ -38,5 +39,5 @@ export const config = {
     "/((?!.+\\.[\\w]+$|_next).*)", 
     "/", 
     "/(api|trpc)(.*)", 
-  ], 
+  ],
 };

@@ -63,7 +63,7 @@ const Wishlist = () => {
     setLoading(true);
 
     try {
-      const res = await fetch("/api/products/wishlist", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products/wishlist`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -17,7 +17,7 @@ const ProductDetails = ({ params }: { params: { productId: string } }) => {
     try {
       console.log("productId", params.productId);
 
-      const res = await fetch(`/api/products/${params.productId}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products/${params.productId}`, {
         credentials: "include",
       });
 

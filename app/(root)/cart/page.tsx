@@ -35,7 +35,7 @@ const Cart = () => {
 
       setLoading(true);
 
-      const res = await fetch("/api/checkout", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/checkout`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

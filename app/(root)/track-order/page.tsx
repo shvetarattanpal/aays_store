@@ -52,17 +52,11 @@ export default function TrackOrderPage() {
     }
   };
 
-  const renderStatusStep = (label: string, timestamp?: string) => (
-    <div className="flex items-center space-x-2">
-      <div className={`w-4 h-4 rounded-full ${timestamp ? 'bg-green-500' : 'bg-gray-300'}`} />
-      <div>
-        <p className="font-medium">{label}</p>
-        <p className="text-xs text-gray-500">
-          {timestamp ? new Date(timestamp).toLocaleString() : 'Pending'}
-        </p>
-      </div>
-    </div>
-  );
+  const statusSteps = ['ordered', 'shipped', 'outForDelivery', 'delivered'];
+
+  const getCurrentStepIndex = () => {
+    return statusSteps.findIndex((step) => step === orderDetails?.status);
+  };
 
   return (
     <div className="max-w-xl mx-auto p-4 sm:p-6 text-black">
@@ -91,11 +85,38 @@ export default function TrackOrderPage() {
           <p className="text-lg font-semibold mb-2">Order ID: {orderDetails.orderId}</p>
           <p className="text-sm mb-4">Email: {orderDetails.email}</p>
 
-          <div className="space-y-4">
-            {renderStatusStep('Ordered', orderDetails.statusTimestamps?.ordered)}
-            {renderStatusStep('Shipped', orderDetails.statusTimestamps?.shipped)}
-            {renderStatusStep('Out for Delivery', orderDetails.statusTimestamps?.outForDelivery)}
-            {renderStatusStep('Delivered', orderDetails.statusTimestamps?.delivered)}
+          <div className="flex justify-between items-center mt-6">
+            {statusSteps.map((step, index) => {
+              const currentIndex = getCurrentStepIndex();
+              const timestamp = orderDetails.statusTimestamps?.[step as keyof OrderStatusTimestamps];
+              const isCompleted = index < currentIndex;
+              const isCurrent = index === currentIndex;
+
+              return (
+                <div key={step} className="flex flex-col items-center w-full relative">
+                  {index !== 0 && (
+                    <div
+                      className={`absolute top-2 left-0 w-full h-1 ${
+                        isCompleted || isCurrent ? 'bg-green-500' : 'bg-gray-300'
+                      } z-0`}
+                    ></div>
+                  )}
+
+                  <div className={`z-10 w-6 h-6 rounded-full flex items-center justify-center 
+                    ${isCompleted ? 'bg-green-500 text-white' : isCurrent ? 'bg-yellow-500 text-white' : 'bg-gray-300 text-gray-600'}`}>
+                    {isCompleted ? '✓' : isCurrent ? '⏳' : ''}
+                  </div>
+
+                  <p className="text-xs mt-2 text-center">
+                    {step === 'outForDelivery' ? 'Out for Delivery' : step.charAt(0).toUpperCase() + step.slice(1)}
+                  </p>
+
+                  <p className="text-[10px] text-gray-500 mt-1">
+                    {timestamp ? new Date(timestamp).toLocaleString() : 'Pending'}
+                  </p>
+                </div>
+              );
+            })}
           </div>
         </div>
       )}

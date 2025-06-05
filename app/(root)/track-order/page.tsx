@@ -31,7 +31,7 @@ export default function TrackOrderPage() {
     try {
       const cleanedId = orderId.trim().replace(/^Order ID:\s*/, '');
 
-      const res = await fetch(`/api/orders/${cleanedId}`);
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/orders/${cleanedId}`);
 
       let data: any;
       try {

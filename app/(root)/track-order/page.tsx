@@ -32,10 +32,16 @@ export default function TrackOrderPage() {
       const cleanedId = orderId.trim().replace(/^Order ID:\s*/, '');
 
       const res = await fetch(`/api/orders/${cleanedId}`);
-      const data = await res.json();
+
+      let data: any;
+      try {
+        data = await res.json();
+      } catch (jsonErr) {
+        throw new Error('Invalid server response. Please try again.');
+      }
 
       if (!res.ok) {
-        throw new Error(data.message || 'Order not found');
+        throw new Error(data?.message || 'Order not found');
       }
 
       setOrderDetails(data.orderDetails);
